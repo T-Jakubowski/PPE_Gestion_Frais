@@ -35,26 +35,15 @@ switch ($control) {
             defaultRoutes_get($fragments);
             break;
         }
-    case "pompier" :    //Si page pompier
+    case "fiche_frais" :    //Si page fiche_frais
         {
             //echo "Gestion des routes pour pompier <hr>";
             //calling function to prevend all hard code here
             if ($_SERVER["REQUEST_METHOD"] == "GET") {
-                pompierRoutes_get($fragments);
+                ficheFraisRoutes_get($fragments);
             }
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                pompierRoutes_post($fragments);
-            }
-            break;
-        }
-    case "caserne" :    //Si page caserne
-        {
-            //echo "Gestion des routes pour caserne<hr>";
-            if ($_SERVER["REQUEST_METHOD"] == "GET") {
-                caserneRoutes_get($fragments);
-            }
-            if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                caserneRoutes_post($fragments);
+                ficheFraisRoutes_post($fragments);
             }
             break;
         }
@@ -131,33 +120,33 @@ function homeRoutes_post($fragments)
     call_user_func_array([new HomeController(), "index"], $fragments);
 }
 
-function pompierRoutes_get($fragments) {
+function ficheFraisRoutes_get($fragments) {
 
     //var_dump($fragment);
 
-    $action = array_shift($fragments); //action c'est ce que je veut faire sur les pompier
+    $action = array_shift($fragments);
     //var_dump($action);
 
     switch ($action) {
         case "affiche" : {
                 //echo "Calling pompierController->show <hr>";
-                call_user_func_array([new PompierController(), "show"], $fragments); //nomController , methode du controler ,fragment a passer
+                call_user_func_array([new fiche_fraisController(), "show"], $fragments); //nomController , methode du controler ,fragment a passer
                 break;
             }
         case "delete" : {
                 //echo "Calling pompierController->del <hr>";
                 //Access permission can be checked here too
-                call_user_func_array([new PompierController(), "delete"], $fragments);
+                call_user_func_array([new ficheFraisController(), "delete"], $fragments);
                 break;
             }
         case "edit" : {
                 //echo "Calling pompierController->del <hr>";
-                call_user_func_array([new PompierController(), "update"], $fragments); // \app\controllers\PompierController
+                call_user_func_array([new ficheFraisController(), "update"], $fragments); // \app\controllers\PompierController
                 break;
             }
         case "add" : {
                 //echo "Calling pompierController->show <hr>";
-                call_user_func_array([new PompierController(), "insert"], $fragments); //nomController , methode du controler ,fragment a passer
+                call_user_func_array([new ficheFraisController(), "insert"], $fragments); //nomController , methode du controler ,fragment a passer
                 break;
             }
         default : {
@@ -167,69 +156,26 @@ function pompierRoutes_get($fragments) {
     }
 }
 
-function pompierRoutes_post($fragments) {
+function ficheFraisRoutes_post($fragments) {
     $action = array_shift($fragments);
     switch ($action) {
         case "delete":
             //Access permission can be checked here too
-            call_user_func_array([new PompierController(), "delete"], $fragments); // \app\controllers\PompierController
+            call_user_func_array([new ficheFraisController(), "delete"], $fragments); // \app\controllers\PompierController
             break;
         case "add" :
             //echo "Action '$action' ready <hr>";
             //Access permission can be checked here too
-            call_user_func_array([new PompierController(), "insert"], $fragments);
+            call_user_func_array([new ficheFraisController(), "insert"], $fragments);
             break;
         case "edit" : {
                 //echo "Calling pompierController->del <hr>";
-                call_user_func_array([new PompierController(), "update"], $fragments); // \app\controllers\PompierController
+                call_user_func_array([new ficheFraisController(), "update"], $fragments); // \app\controllers\PompierController
                 break;
             }
 
         default:
             echo "Action '$action' non defini <hr>";
-            break;
-    }
-}
-
-function caserneRoutes_get($fragments) {
-    $action = array_shift($fragments);
-    switch ($action) {
-        case "affiche":
-            //Access permission can be checked here too
-            call_user_func_array([new CaserneController(), "show"], $fragments);
-            break;
-        case "detail" :
-            call_user_func_array([new CaserneController(), "showDetails"], $fragments);
-            break;
-        case "add" :
-            call_user_func_array([new CaserneController(), "insert"], $fragments);
-            break;
-        case "delete" :
-            call_user_func_array([new CaserneController(), "delete"], $fragments);
-            break;
-        case "update" :
-            call_user_func_array([new CaserneController(), "update"], $fragments);
-            break;
-
-        default:
-            echo "Action '$action' non defini <hr>";
-            break;
-    }
-}
-
-function caserneRoutes_post($fragments) {
-    $action = array_shift($fragments);
-    switch ($action) {
-        case "delete" :
-            call_user_func_array([new CaserneController(), "delete"], $fragments);
-            break;
-        case "add" :
-            call_user_func_array([new CaserneController(), "insert"], $fragments);
-            break;
-        case "update" :
-            call_user_func_array([new CaserneController(), "update"], $fragments);
-            break;
-        default:
             break;
     }
 }
