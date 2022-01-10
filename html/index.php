@@ -3,11 +3,10 @@
 require_once '../autoloader.php';
 
 use app\controllers\BaseController;
-use app\controllers\CaserneController;
-use app\controllers\PompierController;
 use app\controllers\UserController;
 use app\controllers\RoleController;
 use app\controllers\LoginController;
+use app\controllers\FicheFraisController;
 use app\controllers\DefaultController;
 use app\controllers\HomeController;
 
@@ -130,23 +129,23 @@ function ficheFraisRoutes_get($fragments) {
     switch ($action) {
         case "affiche" : {
                 //echo "Calling pompierController->show <hr>";
-                call_user_func_array([new fiche_fraisController(), "show"], $fragments); //nomController , methode du controler ,fragment a passer
+                call_user_func_array([new FicheFraisController(), "show"], $fragments); //nomController , methode du controler ,fragment a passer
                 break;
             }
         case "delete" : {
                 //echo "Calling pompierController->del <hr>";
                 //Access permission can be checked here too
-                call_user_func_array([new ficheFraisController(), "delete"], $fragments);
+                call_user_func_array([new FicheFraisController(), "delete"], $fragments);
                 break;
             }
         case "edit" : {
                 //echo "Calling pompierController->del <hr>";
-                call_user_func_array([new ficheFraisController(), "update"], $fragments); // \app\controllers\PompierController
+                call_user_func_array([new FicheFraisController(), "edit"], $fragments); // \app\controllers\PompierController
                 break;
             }
         case "add" : {
                 //echo "Calling pompierController->show <hr>";
-                call_user_func_array([new ficheFraisController(), "insert"], $fragments); //nomController , methode du controler ,fragment a passer
+                call_user_func_array([new FicheFraisController(), "insert"], $fragments); //nomController , methode du controler ,fragment a passer
                 break;
             }
         default : {
@@ -161,16 +160,16 @@ function ficheFraisRoutes_post($fragments) {
     switch ($action) {
         case "delete":
             //Access permission can be checked here too
-            call_user_func_array([new ficheFraisController(), "delete"], $fragments); // \app\controllers\PompierController
+            call_user_func_array([new FicheFraisController(), "delete"], $fragments); // \app\controllers\PompierController
             break;
         case "add" :
             //echo "Action '$action' ready <hr>";
             //Access permission can be checked here too
-            call_user_func_array([new ficheFraisController(), "insert"], $fragments);
+            call_user_func_array([new FicheFraisController(), "insert"], $fragments);
             break;
         case "edit" : {
                 //echo "Calling pompierController->del <hr>";
-                call_user_func_array([new ficheFraisController(), "update"], $fragments); // \app\controllers\PompierController
+                call_user_func_array([new FicheFraisController(), "edit"], $fragments); // \app\controllers\PompierController
                 break;
             }
 

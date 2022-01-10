@@ -4,10 +4,12 @@ namespace app\views;
 use App\Controllers\FicheFraisController;
 ?>
 <html>
-<?php $ActivePageName = 'fiche_frais'; ?>
-@include('Nav_Barre')
+<?php $ActivePageName = 'fiche_frais'; 
+require ('Head.php');
+?>
+
 <body>
-@include('Head')
+<?php  require ('view_NavBarre.php'); ?>
 <br>
     <div class="container">
         <div class="row justify-content-end">
@@ -19,8 +21,8 @@ use App\Controllers\FicheFraisController;
 <br>
 
 <select id="monselect">
-    <?php foreach($desFiches as $date){ ?>
-  <option value="valeur1"><?php echo $date->Date ?></option>
+    <?php foreach($desDates as $date){ ?>
+  <option value="valeur1"><?php echo $date ?></option>
     <?php } ?>
 </select>
 
@@ -46,10 +48,10 @@ use App\Controllers\FicheFraisController;
     <tbody>
         <tr>
             <tr>
-                <td><?php echo $ficheFrais->Km; ?></td>
-                <td><?php echo $ficheFrais->Repas;?></td>
-                <td><?php echo $ficheFrais->Nuite;?></td>
-                <td><?php echo $ficheFrais->Etat;?></td>
+                <td><?php echo $ficheFrais->getKm(); ?></td>
+                <td><?php echo $ficheFrais->getRepas();?></td>
+                <td><?php echo $ficheFrais->getNuite();?></td>
+                <td><?php echo $ficheFrais->getEtat();?></td>
                 <td><button  type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#editFicheModal"><img class="fit-picture" src="/img/edit_black_24dp.svg" alt="edit"></button>
             </tr>
     </tbody>
@@ -76,8 +78,8 @@ use App\Controllers\FicheFraisController;
             ?>
             <tr>
                 <td><?php echo $i; ?></td>
-                <td><?php echo $uneLigne->Libelle;?></td>
-                <td><?php echo $uneLigne->Prix;?></td>
+                <td><?php echo $uneLigne->getLibelle();?></td>
+                <td><?php echo $uneLigne->getPrix();?></td>
                 <td><button  type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#editLigneModal"><img class="fit-picture" src="/img/edit_black_24dp.svg" alt="edit"></button>
                     <button  type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteLigneModal"><img class="fit-picture" src="/img/delete_black_24dp.svg" alt="delete"></button></td>
             </tr>
@@ -97,7 +99,7 @@ use App\Controllers\FicheFraisController;
                 <h5 class="modal-title" id="createFicheModalLabel">Edit</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="UpdateFiche" method="post" action="/fiche/edit">
+            <form id="UpdateFiche" method="post" action="/fiche_frais/edit">
             <div class="modal-body">
                     <div class="input-group mb-3">
                         <input id="editKm" name="editKm" type="text" class="form-control" placeholder="15" aria-label="Recipient's username" aria-describedby="basic-addon2">

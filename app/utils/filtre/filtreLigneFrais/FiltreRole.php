@@ -11,11 +11,11 @@ class FiltreRole{
     public function __construct($formData){
         $this->formData=$formData;
     }
-    public function acceptRole(string $key,AbstractRole $role){
+    public function acceptRole(string $key,AbstractRole $caserne){
         $data=$this->formData;
         foreach($data as $keys=>$value){
             if ($keys==$key){
-                $datas=$role->checkRole($value);
+                $datas=$caserne->checkRole($value);
             }
         }
         return $datas;
