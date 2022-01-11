@@ -121,6 +121,20 @@ class DAOUser {
 
     /*
       Renvoie Tout les user
+      @return array<User>
+     */
+    public function findAllNoLimit() : array {
+        $sql = 'SELECT * FROM user';
+        $prepared_Statement = $this->cnx->prepare($sql);
+        $prepared_Statement->execute();
+        while ($row = $prepared_Statement->fetch(\PDO::FETCH_ASSOC)) {
+            $desUser[] = new User($row['Identifiant'], $row['Nom'], $row['Prenom'], $row['password'], $row['IdRole']);
+        }
+        return $desUser;
+    }
+
+    /*
+      Renvoie Tout les user
       @param int $offset
       @param int $limit
       @return array<User>

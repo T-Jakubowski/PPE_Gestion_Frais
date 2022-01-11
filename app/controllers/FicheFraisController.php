@@ -32,32 +32,27 @@ class FicheFraisController extends BaseController
     }
 
     public function show() : void {
-        
-        $whoIsLogged = $_SESSION['identifiant'];
 
-        $today = date("Y-m-01");
-
-        $ficheFrais = $this->DAOFicheFrais->find('1999-08-30', 'adtdyganed');
-
-        $desLigneFrais = $this->DAOLigneFrais->find('1999-08-30','adtdyganed');
-
-        $desDates = $this->DAOFicheFrais->findDate('adtdyganed');
-
-        $page = Renderer::render("view_fiche_frais.php", compact('ficheFrais', 'desLigneFrais', 'desDates'));
+        $auth = new Auth();
+        $isactive = $auth->is_session_active();
+        if ($isactive == true) {
+            $permission_read = $auth->can('read');
+            $permission_manage = $auth->can('manage');
+            if ($permission_read) {
+                $whoIsLogged = $_SESSION['identifiant'];
+                $today = date("Y-m-01");
+                $ficheFrais = $this->DAOFicheFrais->find('1999-08-30', 'adtdyganed');
+                $desLigneFrais = $this->DAOLigneFrais->find('1999-08-30','adtdyganed');
+                $desDates = $this->DAOFicheFrais->findDate('adtdyganed');
+                $desUsers = $this->DAOUser->findAllNoLimit();
+                $page = Renderer::render("view_fiche_frais.php", compact('ficheFrais', 'desLigneFrais', 'desDates', 'desUsers'));     
+            } else {
+                $page = Renderer::render("view_denyAccess.php");
+            }
+        } else {
+            $page = Renderer::render("view_login.php");
+        }
         echo $page;
-        /*$desUsers = User::all('Identifiant');
-        $desIdentifiant = [];
-        foreach($desUsers as $user){
-            array_push($desIdentifiant, $user->Identifiant);
-        }*/
-        
-
-
-        /*return view('Fiche_Frais')
-            ->with('ficheFrais', $ficheFrais)
-            ->with('desLigneFrais', $desLigneFrais)
-            ->with('desIdentifiant', $desIdentifiant)
-            ->with('desFiches', $desFiches) ;*/
     }
 
     public function insert(){
@@ -66,7 +61,7 @@ class FicheFraisController extends BaseController
     }
 
     public function delete(){
-        
+        $this->DAOLigneFrais->remove($_SESSION("editidentifiant"));
     }
 
     public function edit(){

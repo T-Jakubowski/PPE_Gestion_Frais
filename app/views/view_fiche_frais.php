@@ -9,6 +9,30 @@ require ('Head.php');
 ?>
 
 <body>
+
+    <script>
+        function ConfirmDelete(id) {
+            var x = document.getElementById("idLigneToDelete");
+            var y = document.getElementById("wantToDelete");
+            x.value = id;
+            y.innerHTML = id;
+        }
+        function Edit(id) {
+            var x = document.getElementById("editidentifiant");
+            x.value = id;
+            x.innerHTML = id;
+
+            var nom = document.getElementById(id+":Nom").innerHTML;
+            var prenom = document.getElementById(id+":Prenom").innerHTML;
+            var password = document.getElementById(id+":Password").innerHTML;
+            var role = document.getElementById(id+":IdRole").innerHTML;
+            document.getElementById("editnom").value = nom;
+            document.getElementById("editprenom").value = prenom;
+            document.getElementById("editpassword").value = password;
+            document.getElementById("editidrole").value = role;
+        }
+    </script>
+
 <?php  require ('view_NavBarre.php'); ?>
 <br>
     <div class="container">
@@ -27,8 +51,8 @@ require ('Head.php');
 </select>
 
 <select id="monselect">
-    <?php foreach($desIdentifiant as $identifiant){ ?>
-  <option value="valeur1"><?php echo $identifiant ?></option>
+    <?php foreach($desUsers as $u){ ?>
+  <option value="valeur1"><?php echo $u->getIdentifiant(); ?></option>
     <?php } ?>
 </select>
 
@@ -75,14 +99,14 @@ require ('Head.php');
             $i = 0;
             foreach ($desLigneFrais as $uneLigne){ 
             $i += 1;    
-            ?>
+            $id = $uneLigne->getNum();?>
             <tr>
                 <td><?php echo $i; ?></td>
                 <td><?php echo $uneLigne->getLibelle();?></td>
                 <td><?php echo $uneLigne->getPrix();?></td>
-                <td><button  type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#editLigneModal"><img class="fit-picture" src="/img/edit_black_24dp.svg" alt="edit"></button>
-                    <button  type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteLigneModal"><img class="fit-picture" src="/img/delete_black_24dp.svg" alt="delete"></button></td>
-            </tr>
+                <td><button  id ="<?php $id; ?>" onclick="Edit('<?php echo $id; ?>')" type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#editLigneModal"><img class="fit-picture" src="/img/edit_black_24dp.svg" alt="edit"></button>
+                    <button  id ="<?php $id; ?>" onclick="ConfirmDelete('<?php echo $id; ?>')" type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteLigneModal"><img class="fit-picture" src="/img/delete_black_24dp.svg" alt="delete"></button></td>
+                </tr>
                 <?php
             }?>
     </tbody>
@@ -99,7 +123,7 @@ require ('Head.php');
                 <h5 class="modal-title" id="createFicheModalLabel">Edit</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="UpdateFiche" method="post" action="/fiche_frais/edit">
+            <form id="UpdateFiche" method="post" action="/fiche/edit">
             <div class="modal-body">
                     <div class="input-group mb-3">
                         <input id="editKm" name="editKm" type="text" class="form-control" placeholder="15" aria-label="Recipient's username" aria-describedby="basic-addon2">
@@ -137,6 +161,10 @@ require ('Head.php');
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="InsertLigne" method="post" action="/ligne/add">
+                <div class="input-group mb-3">
+                    <input id="editidentifiant" name="editidentifiant" value="" type="text" class="form-control" placeholder="Value" readonly>
+                    <span class="input-group-text">Id</span>
+                </div>
                 <div class="modal-body">
                     <div class="input-group mb-3">
                         <input id="addLibelle" name="addLibelle" type="text" class="form-control" placeholder="Telephone" aria-label="Recipient's username" aria-describedby="basic-addon2">

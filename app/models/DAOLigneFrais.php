@@ -28,6 +28,14 @@ class DAOLigneFrais {
         }
         return $desLigneFrais;
     }
+
+    public function remove($Num): void
+    {
+        $sql = 'delete from ligne_frais WHERE Num=:Num;';
+        $prepared_Statement = $this->cnx->prepare($sql);
+        $prepared_Statement->bindParam("Num", $Num);
+        $prepared_Statement->execute();
+    }
 }
 
 ?>
