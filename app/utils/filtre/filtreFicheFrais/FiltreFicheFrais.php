@@ -1,5 +1,5 @@
 <?php
-namespace app\utils\filtre\FiltreFicheFrais;
+namespace app\utils\filtre\filtreFicheFrais;
 
 class FiltreFicheFrais{
     private $formData=[];
@@ -33,13 +33,13 @@ class FiltreFicheFrais{
                     $datas[$key]=$this->acceptRole("etat",new EtatFicheFrais());
                     break;
                 case "km":
-                    $datas[$key]=$this->acceptRole("km",new KmFicheFrais());
+                    $datas[$key]=$this->acceptRole("km",new IsNumber());
                     break;
                 case "repas":
-                    $datas[$key]=$this->acceptRole("repas",new RepasFicheFrais());
+                    $datas[$key]=$this->acceptRole("repas",new IsNumber());
                     break;
                 case "nuite":
-                    $datas[$key]=$this->acceptRole("nuite",new NuiteFicheFrais());
+                    $datas[$key]=$this->acceptRole("nuite",new IsNumber());
                     break;
             }
         }
@@ -51,4 +51,3 @@ class FiltreFicheFrais{
         return $value;
     }
 }
-

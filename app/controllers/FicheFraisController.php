@@ -36,10 +36,8 @@ class FicheFraisController extends BaseController
         $whoIsLogged = $_SESSION['identifiant'];
 
         $today = date("Y-m-01");
-        var_dump($today);
 
-
-        $ficheFrais = $this->DAOFicheFrais->find($today, $whoIsLogged);
+        $ficheFrais = $this->DAOFicheFrais->find('1999-08-30', 'adtdyganed');
 
         $desLigneFrais = $this->DAOLigneFrais->find('1999-08-30','adtdyganed');
 
@@ -78,36 +76,42 @@ class FicheFraisController extends BaseController
         if ($isactive == true) {
             $permission = $auth->can('update');
             if ($permission) {
-                $id = htmlspecialchars($_POST['editid']);
-                $isExist = $this->DAORole->findIfRoleIdExist($id);
-                $isSuccess = false;
-                if ($isExist == true) {
-                    $role = htmlspecialchars($_POST['editrole']);
-                    $permission = htmlspecialchars($_POST['editpermission']);
-                    $data = array(
-                        "id" => $id,
-                        "role" => $role,
-                        "permission" => $permission,
-                    );
-                    $f = new FiltreFicheFrais($data);
-                    $data = $f->Fich();
-                    $isSuccess = true;
-                    foreach ($data as $key => $value) {
-                        if ($value == false) {
-                            if ($key != "id") {
-                                $isSuccess = false;
-                                $valueError[] = $key;
-                            }
+
+
+                $Date = date("Y-m-01");
+                $Identifiant = $_SESSION['identifiant'];
+                $Etat = htmlspecialchars($_POST['editEtat']);
+                $Km = htmlspecialchars($_POST['editKm']);
+                $Repas = htmlspecialchars($_POST['editRepas']);
+                $Nuite = htmlspecialchars($_POST['editNuite']);
+
+                $data = array(
+                    "date" => $Date,
+                    "identifiant" => $Identifiant,
+                    "etat" => $Etat,
+                    "km" => $Km,
+                    "repas" => $Repas,
+                    "nuite" => $Nuite,
+                );
+                $f = new FiltreFicheFrais($data);
+                $data = $f->Fich();
+                $isSuccess = true;
+                foreach ($data as $key => $value) {
+                    if ($value == false) {
+                        if ($key != "id") {
+                            $isSuccess = false;
+                            $valueError[] = $key;
                         }
                     }
                 }
+                
                 if ($isSuccess == true) {
-                    $roleToUpdate = new Role(htmlspecialchars($_POST['editid']), htmlspecialchars($_POST['editrole']), htmlspecialchars($_POST['editpermission']));
-                    $this->DAORole->edit($roleToUpdate);
-                    $resultMessage = "le role numéro '" . $id . "' a bien été modifier";
-                    $page = Renderer::render("view_role_edit.php", compact("resultMessage"));
+                    $ficheToUpdate = new FicheFrais($Date, $Identifiant, $Etat, $Repas, $Repas, $Nuite);
+                    $this->DAOFicheFrais->save($ficheToUpdate);
+                    $resultMessage = "la fiche a bien été modifier";
+                    $page = Renderer::render("view_fiche_frais_edit.php", compact("resultMessage"));
                 } else {
-                    $page = Renderer::render("view_role_edit.php", compact("valueError"));
+                    $page = Renderer::render("view_fiche_frais_edit.php", compact("valueError"));
                 }
             } else {
                 $page = Renderer::render("view_denyAccess.php");
@@ -116,17 +120,5 @@ class FicheFraisController extends BaseController
             $page = Renderer::render("view_login.php");
         }
         echo $page;
-
-        $Date = date("Y-m-01");
-        $Identifiant = $_SESSION['identifiant'];
-        $Etat = htmlspecialchars($_POST['editEtat']);
-        $Km = htmlspecialchars($_POST['editKm']);
-        $Repas = htmlspecialchars($_POST['editRepas']);
-        $Nuite = htmlspecialchars($_POST['editNuite']);
-
-        $ficheFrais = new FicheFrais ($Date, $Identifiant, $Etat, $Km, $Repas, $Nuite);
-
-        $this->DAOFicheFrais->save($ficheFrais);
-
     }
 }
