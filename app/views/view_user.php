@@ -83,7 +83,7 @@ namespace app\views;
                         <td id="<?php echo $id . ":Password"; ?>"><?php echo $User->getPassword(); ?></td>
                         <td id="<?php echo $id . ":IdRole"; ?>"><?php echo $User->getIdRole(); ?></td>
                         <td><button id="<?php echo $id . ":edit"; ?>" onclick="Edit('<?php echo $id; ?>')" type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#editUserModal"><img class="fit-picture" src="/img/edit_black_24dp.svg" alt="edit"></button>
-                            <button id="<?php echo $id . ":del"; ?>" onclick="ConfirmDelete('<?php echo $id; ?>')" type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteUserModal"><img class="fit-picture" src="/img/delete_black_24dp.svg" alt="delete"></button></td>
+                            <button id="<?php echo $id . ":del"; ?>" onclick="('<?php echo $id; ?>')" type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteUserModal"><img class="fit-picture" src="/img/delete_black_24dp.svg" alt="delete"></button></td>
                     </tr>
                     <?php
                 }

@@ -18,7 +18,7 @@ require ('Head.php');
             y.innerHTML = id;
         }
         function Edit(id) {
-            var x = document.getElementById("editidentifiant");
+            var x = document.getElementById("editid");
             x.value = id;
             x.innerHTML = id;
 
@@ -44,17 +44,19 @@ require ('Head.php');
     </div>
 <br>
 
-<select id="monselect">
-    <?php foreach($desDates as $date){ ?>
-  <option value="valeur1"><?php echo $date ?></option>
+<form id="selectUser" method="post" action="/fiche_frais/affiche">
+    
+    <?php if ($permission_manage == true){  ?>
+    <select id="desUsers" name="desUsers" <?php if($userSelected == true){ echo 'disabled';} ?> >
+        <option value="<?php echo $user; ?>"> <?php echo $user; ?></option>
+        <?php foreach($desUsers as $u){ ?>
+        <option value="<?php echo $u->getIdentifiant(); ?>"> <?php echo $u->getIdentifiant(); ?></option>
+            <?php } ?>
+    </select>
     <?php } ?>
-</select>
-
-<select id="monselect">
-    <?php foreach($desUsers as $u){ ?>
-  <option value="valeur1"><?php echo $u->getIdentifiant(); ?></option>
-    <?php } ?>
-</select>
+    <input id="date" type="month" name="date">
+    <button class="btn btn-success" type="submit">Valider</button>
+<form>
 
 <div><h3>Fiche </h3></div>
 <div><h3>Frais forfait</h3></div>
@@ -81,7 +83,7 @@ require ('Head.php');
     </tbody>
 </table>
 
-
+<?php if($ligneExist == true){ ?>
 <div><h3>Frais hors-forfait</h3></div>
 
 <table id="tableLigne" class="table table-striped table-hover table-Secondary .table-responsive" >
@@ -111,8 +113,9 @@ require ('Head.php');
             }?>
     </tbody>
 </table>
+<?php } ?>
 
-<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Valider</button>
+
 
 
 <!-- Modal edit Fiche-->
@@ -123,8 +126,8 @@ require ('Head.php');
                 <h5 class="modal-title" id="createFicheModalLabel">Edit</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="UpdateFiche" method="post" action="/fiche/edit">
-            <div class="modal-body">
+            <form id="UpdateFiche" method="post" action="/fiche_frais/edit">
+                <div class="modal-body">
                     <div class="input-group mb-3">
                         <input id="editKm" name="editKm" type="text" class="form-control" placeholder="15" aria-label="Recipient's username" aria-describedby="basic-addon2">
                         <span class="input-group-text" id="basic-addon2">Km</span>
@@ -153,18 +156,14 @@ require ('Head.php');
 
 
 <!-- Modal insert Ligne-->
-<div class="modal fade" id="createLigneModal" tabindex="-1" aria-labelledby="createRoleModalLabel" aria-hidden="true">
+<div class="modal fade" id="createLigneModal" tabindex="-1" aria-labelledby="createLigneModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="createLigneModalLabel">Create Ligne</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="InsertLigne" method="post" action="/ligne/add">
-                <div class="input-group mb-3">
-                    <input id="editidentifiant" name="editidentifiant" value="" type="text" class="form-control" placeholder="Value" readonly>
-                    <span class="input-group-text">Id</span>
-                </div>
+            <form id="InsertLigne" method="post" action="/fiche_frais/ligne_add">
                 <div class="modal-body">
                     <div class="input-group mb-3">
                         <input id="addLibelle" name="addLibelle" type="text" class="form-control" placeholder="Telephone" aria-label="Recipient's username" aria-describedby="basic-addon2">
@@ -193,8 +192,12 @@ require ('Head.php');
                 <h5 class="modal-title" id="createLigneModalLabel">Edit</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="UpdateLigne" method="post" action="/ligne/edit">
-            <div class="modal-body">
+            <form id="UpdateLigne" method="post" action="/fiche_frais/edit_ligne">
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <input id="editid" name="editid" value="" type="text" class="form-control" placeholder="Value" readonly>
+                        <span class="input-group-text">Id</span>
+                    </div>
                     <div class="input-group mb-3">
                         <input id="editLibelle" name="editLibelle" type="text" class="form-control" placeholder="Telephone" aria-label="Recipient's username" aria-describedby="basic-addon2">
                         <span class="input-group-text" id="basic-addon2">Libelle</span>
@@ -223,11 +226,11 @@ require ('Head.php');
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <h3>Etes-vous sur de vouloir supprimé la ligne <span id="wantToDelete"></span> ?</h3>
+                <h3>Etes-vous sur de vouloir supprimé la ligne ?</h3>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">NON</button>
-                <form id="DeleteLigne" method="post" action="/ligne/delete">
+                <form id="DeleteLigne" method="post" action="/fiche_frais/delete_ligne">
                     <input id="idLigneToDelete" name="idLigneToDelete" value="none" hidden>
                     <button type="submit" class="btn btn-success">OUI</button>
                 </form>

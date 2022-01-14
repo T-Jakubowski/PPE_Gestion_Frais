@@ -70,8 +70,44 @@ class DAOFicheFrais {
         $prepared_Statement->bindParam("Km", $Km);
         $prepared_Statement->bindParam("Repas", $Repas);
         $prepared_Statement->bindParam("Nuite", $Nuite);
-
         $prepared_Statement->execute();
+    }
+
+    public function edit(FicheFrais $ff): void
+    {
+        $sql = 'UPDATE fiche_frais
+                SET Etat=:etat, Repas=:repas, Nuite=:nuite, Km=:km
+                Where Date=:date and Identifiant=:identifiant';
+
+        $date = $ff->getDate();
+        $identifiant = $ff->getIdentifiant();
+        $etat = $ff->getEtat();
+        $km = $ff->getKm();
+        $repas = $ff->getRepas();
+        $nuite = $ff->getNuite();
+
+        $prepared_Statement = $this->cnx->prepare($sql);
+        $prepared_Statement->bindParam("date", $date);
+        $prepared_Statement->bindParam("identifiant", $identifiant);
+        $prepared_Statement->bindParam("etat", $etat);
+        $prepared_Statement->bindParam("km", $km);
+        $prepared_Statement->bindParam("repas", $repas);
+        $prepared_Statement->bindParam("nuite", $nuite);
+        $prepared_Statement->execute();
+    }
+
+    public function findIfFicheExist($date, $identifiant ): bool
+    {
+        $sql = 'SELECT * FROM fiche_frais WHERE Date=:date and Identifiant=:identifiant;';
+        $prepared_Statement = $this->cnx->prepare($sql);
+        $prepared_Statement->bindParam("date", $date);
+        $prepared_Statement->bindParam("identifiant", $identifiant);
+        $prepared_Statement->execute();
+        $verification = false;
+        while ($row = $prepared_Statement->fetch(PDO::FETCH_ASSOC)) {
+            $verification = true;
+        }
+        return $verification;
     }
 
 }

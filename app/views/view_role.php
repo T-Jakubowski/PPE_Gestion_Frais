@@ -178,7 +178,7 @@ namespace app\views;
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">NON</button>
                         <form id="DeleteRole" method="post" action="/role/delete">
-                            <input id="idRoleToDelete" name="idRoleToDelete" value="none" hidden>
+                            <input id="idRoleToDelete" name="idRoleToDelete" value="25" hidden>
                             <button type="submit" class="btn btn-success">OUI</button>
                         </form>
                     </div>

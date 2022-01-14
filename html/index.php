@@ -128,24 +128,11 @@ function ficheFraisRoutes_get($fragments) {
 
     switch ($action) {
         case "affiche" : {
-                //echo "Calling pompierController->show <hr>";
-                call_user_func_array([new FicheFraisController(), "show"], $fragments); //nomController , methode du controler ,fragment a passer
-                break;
-            }
-        case "delete" : {
-                //echo "Calling pompierController->del <hr>";
-                //Access permission can be checked here too
-                call_user_func_array([new FicheFraisController(), "delete"], $fragments);
+                call_user_func_array([new FicheFraisController(), "show"], $fragments); 
                 break;
             }
         case "edit" : {
-                //echo "Calling pompierController->del <hr>";
-                call_user_func_array([new FicheFraisController(), "edit"], $fragments); // \app\controllers\PompierController
-                break;
-            }
-        case "add" : {
-                //echo "Calling pompierController->show <hr>";
-                call_user_func_array([new FicheFraisController(), "insert"], $fragments); //nomController , methode du controler ,fragment a passer
+                call_user_func_array([new FicheFraisController(), "edit"], $fragments);
                 break;
             }
         default : {
@@ -158,26 +145,35 @@ function ficheFraisRoutes_get($fragments) {
 function ficheFraisRoutes_post($fragments) {
     $action = array_shift($fragments);
     switch ($action) {
-        case "delete":
+        case "affiche":
             //Access permission can be checked here too
-            call_user_func_array([new FicheFraisController(), "delete"], $fragments); // \app\controllers\PompierController
+            call_user_func_array([new FicheFraisController(), "show"], $fragments);
             break;
-        case "add" :
+        case "delete_ligne":
+            //Access permission can be checked here too
+            call_user_func_array([new FicheFraisController(), "deleteLigne"], $fragments);
+            break;
+        case "ligne_add" :
             //echo "Action '$action' ready <hr>";
             //Access permission can be checked here too
             call_user_func_array([new FicheFraisController(), "insert"], $fragments);
             break;
-        case "edit" : {
+        case "edit_fiche" : {
+            //echo "Calling pompierController->del <hr>";
+            call_user_func_array([new FicheFraisController(), "edit"], $fragments); // \app\controllers\PompierController
+            break;
+        }
+        case "edit_ligne" : {
                 //echo "Calling pompierController->del <hr>";
-                call_user_func_array([new FicheFraisController(), "edit"], $fragments); // \app\controllers\PompierController
+                call_user_func_array([new FicheFraisController(), "edit_line"], $fragments); // \app\controllers\PompierController
                 break;
             }
-
         default:
             echo "Action '$action' non defini <hr>";
             break;
     }
 }
+
 
 function userRoutes_get($fragments) {
     $action = array_shift($fragments);
