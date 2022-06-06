@@ -36,25 +36,30 @@ class FicheFraisController extends BaseController
 
     public function show() : void {
 
-        $user = $_SESSION['identifiant'];
-        $date = date("Y-m-01");
-
-        if(isset($_POST['selectFiche'])){
-            echo "Select";
-        }
-
         $auth = new Auth();
         $isactive = $auth->is_session_active();
+
+        $user = $_SESSION['identifiant'];
+
+        if ($auth->can('manage') && $_POST['desUsers']){
+            $user = $_POST['desUsers'];   
+        }
+
+        $date = date("Y-m-01");
+
+        if ($_POST['date']){
+            $date = $_POST['date'];
+            $date = $date ."-01";
+        }
+
+        
         if ($isactive == true) {
             $permission_read = $auth->can('read');
             $permission_manage = $auth->can('manage');
+            $permission_comptable = $auth->can('comptable');
             if ($permission_read) {
                 $userSelected = false;
 
-                if(isset($_POST['date']) and $permission_manage){
-                    $date = htmlspecialchars($_POST['date']);
-                    
-                }
                 if(isset($_POST['desUsers'])){
                     $user = htmlspecialchars($_POST['desUsers']);
                 }  
@@ -71,16 +76,12 @@ class FicheFraisController extends BaseController
                 $desDates = $this->DAOFicheFrais->findDate($user);
                 $desUsers = $this->DAOUser->findAllNoLimit();
                 
-
-
-
-
                 if ($ligneExist == true) {
                     $desLigneFrais = $this->DAOLigneFrais->find($date, $user);
-                    $page = Renderer::render("view_fiche_frais.php", compact('ficheFrais', 'user','desLigneFrais', 'desDates', 'desUsers', 'ligneExist', 'permission_manage', 'userSelected'));    
+                    $page = Renderer::render("view_fiche_frais.php", compact('ficheFrais', 'user','desLigneFrais', 'desDates', 'desUsers', 'ligneExist', 'permission_manage', 'userSelected', 'permission_comptable'));    
                 }
                 else{
-                    $page = Renderer::render("view_fiche_frais.php", compact('ficheFrais', 'user', 'ligneExist', 'desDates', 'desUsers','userSelected')); 
+                    $page = Renderer::render("view_fiche_frais.php", compact('ficheFrais', 'user', 'ligneExist', 'desDates', 'desUsers','userSelected', 'permission_comptable')); 
                 }
             } else {
                 $page = Renderer::render("view_denyAccess.php");
@@ -204,11 +205,16 @@ class FicheFraisController extends BaseController
         if ($isactive == true) {
             $permission = $auth->can('update');
             if ($permission) {
-
-
+                
                 $Date = date("Y-m-01");
                 $Identifiant = $_SESSION['identifiant'];
-                $Etat = htmlspecialchars($_POST['editEtat']);
+                if ($_POST['editEtat']){
+                    $Etat = htmlspecialchars($_POST['editEtat']);
+                }
+                else {
+                    $ficheFrais = $this->DAOFicheFrais->find($Date, $Identifiant);
+                    $Etat = $ficheFrais->getEtat();
+                }
                 $Km = htmlspecialchars($_POST['editKm']);
                 $Repas = htmlspecialchars($_POST['editRepas']);
                 $Nuite = htmlspecialchars($_POST['editNuite']);

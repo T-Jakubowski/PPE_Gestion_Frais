@@ -140,6 +140,15 @@ class Auth{
                     return false;
                 } 
                 break;
+            case 'comptable':
+                if ($isperm[2] == '1'){
+                    return true;
+                }
+                else{
+                    return false;
+                } 
+                break;
+   
                 
         }
         

@@ -56,7 +56,7 @@ require ('Head.php');
     <?php } ?>
     <input id="date" type="month" name="date">
     <button class="btn btn-success" type="submit">Valider</button>
-<form>
+</form>
 
 <div><h3>Fiche </h3></div>
 <div><h3>Frais forfait</h3></div>
@@ -126,7 +126,7 @@ require ('Head.php');
                 <h5 class="modal-title" id="createFicheModalLabel">Edit</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="UpdateFiche" method="post" action="/fiche_frais/edit">
+            <form id="UpdateFiche" method="post" action="/fiche_frais/edit_fiche">
                 <div class="modal-body">
                     <div class="input-group mb-3">
                         <input id="editKm" name="editKm" type="text" class="form-control" placeholder="15" aria-label="Recipient's username" aria-describedby="basic-addon2">
@@ -140,10 +140,14 @@ require ('Head.php');
                         <input id="editNuite" name="editNuite" type="text" class="form-control" placeholder="9" aria-label="Recipient's username" aria-describedby="basic-addon2">
                         <span class="input-group-text" id="basic-addon2">Nuite</span>
                     </div>
-                    <div class="input-group mb-3">
-                        <input id="editEtat" name="editEtat" type="text" class="form-control" placeholder="Remboursée" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                        <span class="input-group-text" id="basic-addon2">Etat</span>
-                    </div>
+                    <?php   
+                    if ($permission_comptable){ ?>
+                        <div class="input-group mb-3">
+                            <input id="editEtat" name="editEtat" type="text" class="form-control" placeholder="Remboursée" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                            <span class="input-group-text" id="basic-addon2">Etat</span>
+                        </div>
+                    <?php } ?>
+                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

@@ -160,7 +160,7 @@ function ficheFraisRoutes_post($fragments) {
             break;
         case "edit_fiche" : {
             //echo "Calling pompierController->del <hr>";
-            call_user_func_array([new FicheFraisController(), "edit"], $fragments); // \app\controllers\PompierController
+            call_user_func_array([new FicheFraisController(), "edit_fiche"], $fragments); // \app\controllers\PompierController
             break;
         }
         case "edit_ligne" : {
