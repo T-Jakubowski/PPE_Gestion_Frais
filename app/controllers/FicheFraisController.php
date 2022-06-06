@@ -21,7 +21,8 @@ class FicheFraisController extends BaseController
     private DAOFicheFrais $DAOFicheFrais;
     private DAOUser $DAOUser;
 
-    public function __construct() {
+    public function __construct()
+    {
 
         $cnx = SingletonDBMaria::getInstance()->getConnection();
         $DAOFicheFrais = new DAOFicheFrais($cnx);
@@ -34,25 +35,35 @@ class FicheFraisController extends BaseController
         $this->DAOUser = $DAOUser;
     }
 
-    public function show() : void {
+    public function show(): void
+    {
 
         $auth = new Auth();
         $isactive = $auth->is_session_active();
 
-        $user = $_SESSION['identifiant'];
+        if ($_SESSION['IdentifiantSelected']) {
+            $user = $_SESSION['IdentifiantSelected'];
+        } else {
+            $user = $_SESSION['identifiant'];
+        }
 
-        if ($auth->can('manage') && $_POST['desUsers']){
-            $user = $_POST['desUsers'];   
+        if ($auth->can('manage') && $_POST['desUsers']) {
+            $user = $_POST['desUsers'];
         }
 
         $date = date("Y-m-01");
 
-        if ($_POST['date']){
-            $date = $_POST['date'];
-            $date = $date ."-01";
+        if ($_SESSION['date']) {
+            $date = $_SESSION['date'];
         }
 
-        
+        if ($_POST['date']) {
+            $date = $_POST['date'];
+            $date = $date . "-01";
+        }
+
+        $_SESSION['date'] = $date;
+
         if ($isactive == true) {
             $permission_read = $auth->can('read');
             $permission_manage = $auth->can('manage');
@@ -60,28 +71,28 @@ class FicheFraisController extends BaseController
             if ($permission_read) {
                 $userSelected = false;
 
-                if(isset($_POST['desUsers'])){
+                if (isset($_POST['desUsers'])) {
                     $user = htmlspecialchars($_POST['desUsers']);
-                }  
-                    
+                    $_SESSION['IdentifiantSelected'] = $user;
+                }
+
                 $ficheExist = $this->DAOFicheFrais->findIfFicheExist($date, $user);
                 if ($ficheExist) {
                     $ficheFrais = $this->DAOFicheFrais->find($date, $user);
                 } else {
-                    $ficheFraisToAdd = new FicheFrais($date, $user, 'En Cours',0,0,0);
+                    $ficheFraisToAdd = new FicheFrais($date, $user, 'En cours', 0, 0, 0);
                     $this->DAOFicheFrais->save($ficheFraisToAdd);
                     $ficheFrais = $this->DAOFicheFrais->find($date, $user);
                 }
                 $ligneExist = $this->DAOLigneFrais->findIfExist($date, $user);
                 $desDates = $this->DAOFicheFrais->findDate($user);
                 $desUsers = $this->DAOUser->findAllNoLimit();
-                
+
                 if ($ligneExist == true) {
                     $desLigneFrais = $this->DAOLigneFrais->find($date, $user);
-                    $page = Renderer::render("view_fiche_frais.php", compact('ficheFrais', 'user','desLigneFrais', 'desDates', 'desUsers', 'ligneExist', 'permission_manage', 'userSelected', 'permission_comptable'));    
-                }
-                else{
-                    $page = Renderer::render("view_fiche_frais.php", compact('ficheFrais', 'user', 'ligneExist', 'desDates', 'desUsers','userSelected', 'permission_comptable')); 
+                    $page = Renderer::render("view_fiche_frais.php", compact('ficheFrais', 'user', 'desLigneFrais', 'desDates', 'desUsers', 'ligneExist', 'permission_manage', 'userSelected', 'permission_comptable'));
+                } else {
+                    $page = Renderer::render("view_fiche_frais.php", compact('ficheFrais', 'user', 'ligneExist', 'desDates', 'desUsers', 'userSelected', 'permission_comptable'));
                 }
             } else {
                 $page = Renderer::render("view_denyAccess.php");
@@ -92,14 +103,19 @@ class FicheFraisController extends BaseController
         echo $page;
     }
 
-    public function insert(){
+    public function insert()
+    {
         $auth = new Auth();
         $isactive = $auth->is_session_active();
         if ($isactive == true) {
             $permission = $auth->can('write');
             if ($permission) {
-                $whoIsLogged = $_SESSION['identifiant'];
-                $today = date("Y-m-01");
+                if ($_SESSION['IdentifiantSelected']) {
+                    $whoIsLogged = $_SESSION['IdentifiantSelected'];
+                } else {
+                    $whoIsLogged = $_SESSION['identifiant'];
+                }
+                $today = $_SESSION['date'];
                 $libelle = htmlspecialchars($_POST['addLibelle']);
                 $prix = htmlspecialchars($_POST['addPrix']);
                 $data = array(
@@ -132,7 +148,8 @@ class FicheFraisController extends BaseController
         echo $page;
     }
 
-    public function edit_line(){
+    public function edit_line()
+    {
         $auth = new Auth();
         $isactive = $auth->is_session_active();
         if ($isactive == true) {
@@ -178,7 +195,8 @@ class FicheFraisController extends BaseController
         echo $page;
     }
 
-    public function deleteLigne(){
+    public function deleteLigne()
+    {
         $auth = new Auth();
         $isactive = $auth->is_session_active();
         if ($isactive == true) {
@@ -188,7 +206,6 @@ class FicheFraisController extends BaseController
                 $resultMessage = "la ligne a bien été Supprimer";
                 $this->DAOLigneFrais->remove($id);
                 $page = Renderer::render("view_fiche_frais_delete.php", compact("resultMessage"));
-
             } else {
                 $page = Renderer::render("view_denyAccess.php");
             }
@@ -198,20 +215,20 @@ class FicheFraisController extends BaseController
         echo $page;
     }
 
-    public function edit_fiche(){
+    public function edit_fiche()
+    {
 
         $auth = new Auth();
         $isactive = $auth->is_session_active();
         if ($isactive == true) {
             $permission = $auth->can('update');
             if ($permission) {
-                
-                $Date = date("Y-m-01");
-                $Identifiant = $_SESSION['identifiant'];
-                if ($_POST['editEtat']){
+
+                $Date = $_SESSION['date'];
+                $Identifiant = $_SESSION['IdentifiantSelected'];
+                if ($_POST['editEtat']) {
                     $Etat = htmlspecialchars($_POST['editEtat']);
-                }
-                else {
+                } else {
                     $ficheFrais = $this->DAOFicheFrais->find($Date, $Identifiant);
                     $Etat = $ficheFrais->getEtat();
                 }
@@ -238,7 +255,7 @@ class FicheFraisController extends BaseController
                         }
                     }
                 }
-                
+
                 if ($isSuccess == true) {
                     $ficheToUpdate = new FicheFrais($Date, $Identifiant, $Etat, $Repas, $Repas, $Nuite);
                     $this->DAOFicheFrais->edit($ficheToUpdate);

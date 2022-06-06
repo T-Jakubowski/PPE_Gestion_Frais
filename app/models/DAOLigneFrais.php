@@ -82,7 +82,7 @@ class DAOLigneFrais {
                 SET Libelle=:libelle, Prix=:prix
                 Where Num=:num';
 
-        $libelle = $ln->getIdentifiant();
+        $libelle = $ln->getLibelle();
         $prix = $ln->getPrix();
         $num = $ln->getNum();
 
