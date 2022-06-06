@@ -73,11 +73,13 @@ if (isset($ActivePageName)) {
             <a class="btn btn-danger" href="/logout"><img src="/img/logout_black_24dp.svg" alt="Deconnexion"></a>
         </div>
 
-        <?php if ($ActivePageName != "home") { ?>
+        <?php if ($ActivePageName != "home") { 
+            if ($ActivePageName != "fiche_frais") {  ?>
             <form class="d-flex" target="/<?php echo $ActivePageName ?>/affiche" id="<?php echo $ActivePageName; ?>FormSearch">
                 <input class="form-control me-2" id="<?php echo $ActivePageName; ?>InputSearch" name="search" type="search" placeholder="Search <?php echo $ActivePageName ?>" aria-label="Search">
                 <button class="btn btn-success" type="submit">Search</button>
             </form>
-        <?php } ?>
+        <?php } 
+        } ?>
     </nav>
 </header>
