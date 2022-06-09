@@ -2,9 +2,7 @@
 namespace app\utils\filtre\filtreLigneFrais;
 use app\models\DAOLigneFrais;
 use app\utils\SingletonDBMaria;
-/*
-* @author Baptiste Coquelet <b.coquelet@eleve.leschartreux.net>
-*/
+
 abstract class AbstractLigneFrais {
     protected DAOLigneFrais $DAOLigneFrais;
     public function __construct(){

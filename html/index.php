@@ -16,8 +16,8 @@ session_start();
 //https://openclassrooms.com/fr/courses/2078536-developpez-votre-site-web-avec-le-framework-symfony2-ancienne-version/2079345-le-routeur-de-symfony2
 //echo "<pre>" . print_r($_SERVER, true) . "<pre>";
 
-if (isset($_SERVER["PATH_INFO"])) {
-    $path = trim($_SERVER["PATH_INFO"], "/");
+if (isset($_SERVER['REQUEST_URI'])) {
+    $path = trim($_SERVER['REQUEST_URI'], "/");
 } else {
     $path = "";
 }

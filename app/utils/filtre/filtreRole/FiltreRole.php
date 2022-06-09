@@ -1,9 +1,6 @@
 <?php
 namespace app\utils\filtre\filtreRole;
 
-/*
-* @author Baptiste Coquelet <b.coquelet@eleve.leschartreux.net>
-*/
 class FiltreRole{
     private $formData=[];
     private $results=[];

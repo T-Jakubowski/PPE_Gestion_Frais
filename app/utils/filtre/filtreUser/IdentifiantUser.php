@@ -1,8 +1,6 @@
 <?php
 namespace app\utils\filtre\filtreUser;
-/*
-* @author Baptiste Coquelet <b.coquelet@eleve.leschartreux.net>
-*/
+
 class IdentifiantUser extends AbstractUser{
     public function checkUser(string $data) : bool {
         $isValid = false;
